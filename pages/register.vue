@@ -1,123 +1,102 @@
 <template>
-  <section class="section">
-    <div class="container">
-      <div class="columns">
-        <div class="column is-4 is-offset-4">
-
-          <h2 class="title has-text-centered">Register!</h2>
-
-          <form id="app" @submit="checkForm" method="post">
-
-            
-            <div class="field">
-              <label class="label">Nome</label>
-              <div class="control">
-                <input
-                  type="text"
-                  class="input"
-                  name="nome"
-                  v-model="user.name"
-                  required
-                >
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Email</label>
-              <div class="control">
-                <input
-                  type="email"
-                  class="input"
-                  name="email"
-                  v-model="user.email"
-                  required
-                >
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label">Senha</label>
-              <div class="control">
-                <input
-                  type="password"
-                  class="input"
-                  name="password"
-                  v-model="user.password"
-                  required
-                >
-              </div>
-            </div>
-            
-            <div class="field">
-              <label class="label">Confirmar</label>
-              <div class="control">
-                <input
-                  type="password"
-                  class="input"
-                  name="confirmar"
-                  v-model="user.password2"
-                  required
-                >
-              </div>
-            </div>
-
-            <div class="control">
-              <button @click="submit()"  class="registerbtn">Enviar</button>
-            </div>
-          </form>
-
-          <div class="has-text-centered" style="margin-top: 20px">
-            Already got an account? <nuxt-link to="/login">Login</nuxt-link>
-          </div>
+  <ValidationObserver v-slot="{ invalid }">
+    <form @submit.prevent="onSubmit">
+      <h3>Cadastre-se</h3>
+      <ValidationProvider rules="required|min:3" v-slot="{ errors, classes }">
+        <div class="control" :class="classes">
+          <input type="text" v-model="user.name">
+          <span>{{ errors[0] }}</span>
         </div>
-      </div>
+      </ValidationProvider>
+
+      <ValidationProvider rules="required|email" v-slot="{ errors, classes }">
+        <div class="control" :class="classes">
+          <input type="text" v-model="user.email">
+          <span>{{ errors[0] }}</span>
+        </div>
+      </ValidationProvider>
+
+      <ValidationObserver>
+        <ValidationProvider rules="confirmed:confirmation|min:6" v-slot="{ errors, classes }">
+          <div class="control" :class="classes">
+            <input v-model="user.password" type="password">
+            <span>{{ errors[0] }}</span>
+          </div>
+        </ValidationProvider>
+
+        <ValidationProvider v-slot="{ errors }" vid="confirmation">
+          <input v-model="user.confirmation" type="password">
+          <span>{{ errors[0] }}</span>
+        </ValidationProvider>
+      </ValidationObserver>
+
+      <button type="submit" :disabled="invalid">Submit</button>
+    </form>
+    <div class="has-text-centered" style="margin-top: 20px">
+      Já tem uma conta? <nuxt-link to="/">Entrar</nuxt-link>
     </div>
-    </div>
-  </section>
+  </ValidationObserver>
+
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
-import { required, minLengt, email } from 'vuelidate/lib/validators';
+  import {ValidationProvider} from "vee-validate";
+  import {mapState,mapActions} from 'vuex';
 
-export default {
-  components: {
-  },
-
-  data: ()  => ({
-    user: {
-      name: '',
-      email: '',
-      password: '',
-      password2: ''
+  export default {
+    components: {
+      ValidationProvider
+    },
+    data: () => ({
+      user: {
+        name: "",
+        email: "",
+        password: "",
+        confirmation: "",
       }
-  }),
 
-
-
-  methods: {
-     ...mapActions({
-       userRegister: 'USER_REGISTER'
     }),
-    checkForm(){
-      if (this.user.password != this.user.password2){
-        alert("Senhas não coincidem. Tente novamente.")
-      }
-      else{
+    methods: {
+      ...mapActions({
+        userRegister: 'userRegister'
+      }),
+      onSubmit() {
         this.userRegister(this.user)
       }
-    },
-    // async register() {
-    //   try {
-    //     await this.$axios.post('register', {
-    //       email: 'eve.holt@reqres.in',
-    //       password: this.user.password
-    //     })
-    //     this.$router.push('/')
-    //   } catch (e) {
-    //     this.error = e.response.data.message
-    //   }
-    // }
-  }
-}
+    }
+  };
+
 </script>
+
+<style>
+  .control {
+    width: 100;
+  }
+
+  .span {
+    display: block;
+  }
+
+  input {
+    padding: 5px 10px;
+  }
+
+  .is-invalid span,
+  .is-invalid input {
+    color: #EB0600
+  }
+
+  .is-invalid input {
+    border: 1px #EB0600 solid
+  }
+
+  .is-valid span,
+  .is-valid input {
+    color: #045929
+  }
+
+  .is-valid input {
+    border: 1px #045929 solid
+  }
+
+</style>

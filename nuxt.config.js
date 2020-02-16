@@ -28,6 +28,9 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '@/plugins/veevalidate',
+    { src: '~/plugins/vuexpersist', ssr: false },
+    '@/plugins/map',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -41,6 +44,8 @@ export default {
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
+    
+    
   ],
   axios: {
     baseURL: 'https://reqres.in/api'
@@ -49,10 +54,10 @@ export default {
   ** Build configuration
   */
   build: {
+    transpile: ["vee-validate/dist/rules"],
     /*
-    ** You can extend webpack config here
-    */
-    extend (config, ctx) {
-    }
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) {}
   }
 }
