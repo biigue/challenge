@@ -1,5 +1,6 @@
 
 export default {
+
   mode: 'universal',
   /*
   ** Headers of the page
@@ -30,7 +31,7 @@ export default {
   plugins: [
     '@/plugins/veevalidate',
     { src: '~/plugins/vuexpersist', ssr: false },
-    '@/plugins/map',
+    { src: '@/plugins/map', ssr: true},
   ],
   /*
   ** Nuxt.js dev-modules
@@ -43,7 +44,7 @@ export default {
   modules: [
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
-    '@nuxtjs/axios',
+    '@nuxtjs/axios'
     
     
   ],
@@ -54,7 +55,8 @@ export default {
   ** Build configuration
   */
   build: {
-    transpile: ["vee-validate/dist/rules"],
+    transpile: ["vee-validate/dist/rules", "/^vue2-google-maps($|\/)/"],
+    
     /*
      ** You can extend webpack config here
      */
