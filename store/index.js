@@ -31,15 +31,23 @@ export const mutations = {
     state.password = user.password
   },
   addAvaliacao(state, av){
-    if (this.av.favorite ==="accepted"){
+    console.log(av)
+    if (av.reviewInfos.favorite ==="accepted"){
       state.review.push({
-      msg: this.av.msg,
+      msg: av.reviewInfos.msg,
       favorite: true,
+      name: av.name,
+      address: av.address,
+      rating: av.rating
     })
     } 
     else{
       state.review.push({
-        msg: this.av.msg
+        msg: av.reviewInfos.msg,
+        favorite: false,
+        name: av.name,
+        address: av.address,
+        rating: av.rating
     })
   }
 },
@@ -82,7 +90,10 @@ export const actions = {
     
   },
   setAvaliacao({commit}, avaliacao){
-    commit('addAvaliacao', ...avaliacao)
+    commit('addAvaliacao', {...avaliacao})
+  },
+  editUser(){
+    
   }
   
 }

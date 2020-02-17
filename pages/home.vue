@@ -10,7 +10,7 @@
             <div>
               <h4>{{currentInfos.name}}</h4>
               <span>
-                {{currentInfos.addres}}, {{currentInfos.rating}}
+                {{currentInfos.address}}, {{currentInfos.rating}}
               </span>
             </div>
             <div>
@@ -93,7 +93,8 @@ export default {
         setAvaliacao: 'setAvaliacao'
       }),
     onSubmit(){
-        this.setAvaliacao(this.reviewInfos),
+        this.currentInfos.reviewInfos=this.reviewInfos
+        this.setAvaliacao(this.currentInfos)
         this.avaliar = false
     },
     enviarReview(){
@@ -118,7 +119,7 @@ export default {
       var reviews = placeActive.reviews
       var reviewsFormatted = this.getReview(reviews)
       this.currentInfos.name = placeActive.name
-      this.currentInfos.addres = placeActive.formatted_address
+      this.currentInfos.address = placeActive.formatted_address
       this.currentInfos.lat = placeActive.geometry.location.lat()
       this.currentInfos.lng = placeActive.geometry.location.lng()
       this.currentInfos.rating = placeActive.rating
