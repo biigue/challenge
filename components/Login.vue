@@ -29,10 +29,11 @@
                 rules="required" 
                 v-slot="validationContext"
                 >
-                <b-form-group id="password" label="senha" label-for="password">
+                <b-form-group id="password" label="Senha" label-for="password">
                     <b-form-input
                       id="password"
                       name="senha"
+                      type="password"
                       v-model="user.password"
                       :state="getValidationState(validationContext)"
                       aria-describedby="input-1-live-feedback"

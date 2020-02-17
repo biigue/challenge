@@ -11,7 +11,7 @@
       v-slot="validationContext"
       >
 
-      <b-form-group id="nome" label="nome" label-for="nome">
+      <b-form-group id="nome" label="Nome" label-for="nome">
                     <b-form-input
                       id="nome"
                       name="nome"
