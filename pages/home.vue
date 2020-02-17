@@ -1,4 +1,7 @@
 <template>
+<div>
+  <Navbar />
+  <div class="container">
   <b-card no-body class="overflow-hidden" style="margin-top:10%">
     <b-row no-gutters>
       <b-col lg="4">
@@ -29,28 +32,18 @@
                 </div>
               </div>
               <div class="avaliar" v-if="avaliar" style="margin-top: 25px;">
-<b-form @submit.prevent="onSubmit">
-    <b-form-textarea
-    id="textarea"
-    v-model="reviewInfos.msg"
-    placeholder="O que achou do lugar?"
-    rows="3"
-    max-rows="6"
-  ></b-form-textarea>
+                <b-form @submit.prevent="onSubmit">
+                  <b-form-textarea id="textarea" v-model="reviewInfos.msg" placeholder="O que achou do lugar?" rows="3"
+                    max-rows="6"></b-form-textarea>
 
-      <b-form-checkbox
-      id="checkbox-1"
-      v-model="reviewInfos.favorite"
-      name="checkbox-1"
-      value="accepted"
-      unchecked-value="not_accepted"
-    >
-      Favoritar
-    </b-form-checkbox>
+                  <b-form-checkbox id="checkbox-1" v-model="reviewInfos.favorite" name="checkbox-1" value="accepted"
+                    unchecked-value="not_accepted">
+                    Favoritar
+                  </b-form-checkbox>
 
 
-    <b-button @click="enviarReview" variant="primary" type="submit" >Entrar</b-button>
-  </b-form>
+                  <b-button @click="enviarReview" variant="primary" type="submit">Entrar</b-button>
+                </b-form>
               </div>
             </div>
           </div>
@@ -65,103 +58,128 @@
       </b-col>
     </b-row>
   </b-card>
+  </div>
+  </div>
 </template>
 
 <script>
-import {ValidationProvider} from "vee-validate";
-import {mapState,mapActions} from 'vuex';
-export default {
-  data: () => ({
+  import {ValidationProvider} from "vee-validate";
+  import Navbar from '~/components/Navbar.vue'
+  import {mapState,mapActions} from 'vuex';
+  export default {
+    components:{
+      Navbar
+    },
+    data: () => ({
       review: false,
       avaliar: false,
-      center: { lat: -3.350235, lng: 111.995865 },
+      center: {
+        lat: -3.350235,
+        lng: 111.995865
+      },
       mapTypeId: "terrain",
       markers: [],
       currentPlace: false,
       currentInfos: {},
-      reviewInfos:{
-          msg: '',
-          favorite: '',
+      reviewInfos: {
+        msg: '',
+        favorite: '',
       },
-  }),
-  mounted() {
-    this.geolocate()
-  },
-  
-  methods: {
+    }),
+    mounted() {
+      this.geolocate()
+    },
+
+    methods: {
       ...mapActions({
         setAvaliacao: 'setAvaliacao'
       }),
-    onSubmit(){
-        this.currentInfos.reviewInfos=this.reviewInfos
+      onSubmit() {
+        this.currentInfos.reviewInfos = this.reviewInfos
         this.setAvaliacao(this.currentInfos)
         this.avaliar = false
-    },
-    enviarReview(){
+        alert("Obrigada pela avaliação!")
+      },
+      enviarReview() {
         console.log(this.reviewInfos)
-    },
-    showReview(){
+      },
+      showReview() {
         this.review = !this.review
-    },
-    user_review(){
+        this.avaliar = false
+      },
+      user_review() {
         this.avaliar = !this.avaliar
-    },
-    local({ geometry }) {
-      this.markers.push({ lat: geometry.location.lat(), lng:  geometry.location.lng() })
-    },
-    clean(){
-        this.currentPlace = false,
-        currentInfos = {}
-    },
-
-    getAddressData(addressData, placeResultData, id){
-      var placeActive = addressData
-      var reviews = placeActive.reviews
-      var reviewsFormatted = this.getReview(reviews)
-      this.currentInfos.name = placeActive.name
-      this.currentInfos.address = placeActive.formatted_address
-      this.currentInfos.lat = placeActive.geometry.location.lat()
-      this.currentInfos.lng = placeActive.geometry.location.lng()
-      this.currentInfos.rating = placeActive.rating
-      this.currentInfos.favorite = false
-
-      this.addMarker(this.currentInfos.lat, this.currentInfos.lng)
-      //this.currentPlace =  {...placeInfos},
-    },
-    getReview(review){
-      var result = []
-      for ( var i in review){
-        result.push({
-          author: review[i].author_name,
-          rating: review[i].rating,
-          msg: review[i].text,
+        this.review = false
+      },
+      local({
+        geometry
+      }) {
+        this.markers.push({
+          lat: geometry.location.lat(),
+          lng: geometry.location.lng()
         })
-      }
-      this.currentInfos.reviews=result
-    },
+      },
+      clean() {
+        this.currentPlace = false,
+          currentInfos = {}
+      },
 
-    addMarker(lat, lng) {
+      getAddressData(addressData, placeResultData, id) {
+        var placeActive = addressData
+        var reviews = placeActive.reviews
+        var reviewsFormatted = this.getReview(reviews)
+        this.currentInfos.name = placeActive.name
+        this.currentInfos.address = placeActive.formatted_address
+        this.currentInfos.lat = placeActive.geometry.location.lat()
+        this.currentInfos.lng = placeActive.geometry.location.lng()
+        this.currentInfos.rating = placeActive.rating
+        this.currentInfos.favorite = false
 
-      this.markers.push({lat: lat, lng: lng})
-      this.center = {lat: lat, lng: lng};
-      this.currentPlace = true
-    },
+        this.addMarker(this.currentInfos.lat, this.currentInfos.lng)
+        //this.currentPlace =  {...placeInfos},
+      },
+      getReview(review) {
+        var result = []
+        for (var i in review) {
+          result.push({
+            author: review[i].author_name,
+            rating: review[i].rating,
+            msg: review[i].text,
+          })
+        }
+        this.currentInfos.reviews = result
+      },
 
-    geolocate: function() {
-      navigator.geolocation.getCurrentPosition(position => {
+      addMarker(lat, lng) {
+
+        this.markers.push({
+          lat: lat,
+          lng: lng
+        })
         this.center = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
+          lat: lat,
+          lng: lng
         };
-      });
-    },
-  }
+        this.currentPlace = true
+      },
 
-};
+      geolocate: function () {
+        navigator.geolocation.getCurrentPosition(position => {
+          this.center = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+        });
+      },
+    }
+
+  };
+
 </script>
 
 <style>
-.ajust{
+  .ajust {
     text-align: center;
-}
+  }
+
 </style>

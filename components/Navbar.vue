@@ -1,34 +1,30 @@
 <template>
-  <nav class="navbar is-light">
-    <div class="container">
-      <div class="navbar-brand">
-        <nuxt-link class="navbar-item" to="/">Maps</nuxt-link>
-        <button class="button navbar-burger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-      <div class="navbar-menu">
-        <div class="navbar-end">
-          <div class="navbar-item has-dropdown is-hoverable" v-if="isAuthenticated">
-            <a class="navbar-link">
-              <!-- {{ loggedInUser.username }} -->
-            </a>
-            <div class="navbar-dropdown">
-              <nuxt-link class="navbar-item" to="/profile">My Profile</nuxt-link>
-              <hr class="navbar-divider">
-              <a class="navbar-item">Logout</a>
-            </div>
-          </div>
-          <template v-else>
-            <nuxt-link class="navbar-item" to="/register">Register</nuxt-link>
-            <nuxt-link class="navbar-item" to="/login">Log In</nuxt-link>
+  <div>
+  <b-navbar toggleable="lg" type="dark" variant="info">
+    <b-navbar-brand  nuxt-link to="/home">Lugares</b-navbar-brand>
+
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+    <b-collapse id="nav-collapse" is-nav>
+      <b-navbar-nav>
+        <b-nav-item nuxt-link to="/places">Meus Locais</b-nav-item>
+      </b-navbar-nav>
+
+      <!-- Right aligned nav items -->
+      <b-navbar-nav class="ml-auto">
+
+        <b-nav-item-dropdown right>
+          <!-- Using 'button-content' slot -->
+          <template v-slot:button-content>
+            <em>User</em>
           </template>
-        </div>
-      </div>
-    </div>
-  </nav>
+          <b-dropdown-item nuxt-link to="/edit">Editar Perfil</b-dropdown-item>
+          <b-dropdown-item @click="logoff" nuxt-link to="/">Deslogar</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
+</div>
 </template>
 
 <script>
@@ -37,6 +33,11 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters(['isAuthenticated'])
+  },
+   methods: {
+    logoff() {
+      console.log('a')
+    },
   }
 }
 </script>

@@ -15,6 +15,10 @@ export const getters = {
     isAuthenticated(state) {
       return state.loggedIn
     },
+    userReview(state, {review}) {
+      console.log(state)
+      //return state.review
+    },
     emailStorage(){
       return state.email
     }
@@ -31,7 +35,6 @@ export const mutations = {
     state.password = user.password
   },
   addAvaliacao(state, av){
-    console.log(av)
     if (av.reviewInfos.favorite ==="accepted"){
       state.review.push({
       msg: av.reviewInfos.msg,
@@ -53,6 +56,11 @@ export const mutations = {
 },
   userLogin(state, user){
     state.loggedIn = true
+  },
+  edit(state, changes){
+    state.email = changes.email,
+    state.name = changes.name,
+    state.password = chagnes.password
   }
 }
 
@@ -92,8 +100,8 @@ export const actions = {
   setAvaliacao({commit}, avaliacao){
     commit('addAvaliacao', {...avaliacao})
   },
-  editUser(){
-    
+  editUser({commit}, e){
+    commit ('edit', e)
   }
   
 }

@@ -1,4 +1,5 @@
 <template>
+<div class="container">
   <b-card no-body class="overflow-hidden" style="margin-top:10%">
     <b-row no-gutters>
       <b-col lg="6">
@@ -18,6 +19,7 @@
       </b-col>
     </b-row>
   </b-card>
+  </div>
 </template>
 
 <script>
