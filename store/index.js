@@ -7,6 +7,8 @@ export const state = () => ({
   token: '',
   loggedIn: false,
   password: '',
+  places: '',
+  review: []
 })
 
 export const getters = {
@@ -28,6 +30,19 @@ export const mutations = {
     state.email = user.email
     state.password = user.password
   },
+  addAvaliacao(state, av){
+    if (this.av.favorite ==="accepted"){
+      state.review.push({
+      msg: this.av.msg,
+      favorite: true,
+    })
+    } 
+    else{
+      state.review.push({
+        msg: this.av.msg
+    })
+  }
+},
   userLogin(state, user){
     state.loggedIn = true
   }
@@ -43,7 +58,7 @@ export const actions = {
       .post('https://reqres.in/api/register/', register)
       .then(res => {
         commit('addUser', { ...user, id: res.data.id, token: res.data.token})
-        this.$router.push('/')
+        this.$router.push('/home')
       })
       .catch(err => console.log(err))
   },
@@ -65,6 +80,9 @@ export const actions = {
       alert('Email ou senha incorretos')
     }
     
+  },
+  setAvaliacao({commit}, avaliacao){
+    commit('addAvaliacao', ...avaliacao)
   }
   
 }

@@ -1,1 +1,0 @@
-return this.$store.state.posts.all

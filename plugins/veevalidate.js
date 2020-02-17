@@ -4,6 +4,7 @@ import { required, email, confirmed } from "vee-validate/dist/rules";
 
 import { configure } from 'vee-validate';
 
+
 Vue.component('ValidationObserver', ValidationObserver);
 
 configure({

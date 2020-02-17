@@ -1,77 +1,50 @@
 <template>
-   <div class="row">
-     <div class="col">
-        <ValidationObserver v-slot="{ invalid }">
-    <form @submit.prevent="onSubmit">
-      <h3>Cadastre-se</h3>
-
-      <ValidationProvider rules="required|email" v-slot="{ errors, classes }">
-        <div class="control" :class="classes">
-          <input type="text" v-model="user.email">
-          <span>{{ errors[0] }}</span>
-        </div>
-      </ValidationProvider>
-
-        <ValidationProvider rules="required" v-slot="{ errors, classes }">
-          <div class="control" :class="classes">
-            <input v-model="user.password" type="password">
-            <span>{{ errors[0] }}</span>
+  <b-card no-body class="overflow-hidden" style="margin-top:10%">
+    <b-row no-gutters>
+      <b-col lg="6">
+        <b-card-img src="/index.png"></b-card-img>
+      </b-col>
+      <b-col v-if="login" lg="3">
+          <Login />
+          <div class="has-text-centered" style="margin-top: 20px; text-align: center;">
+              Ainda não tem conta? <span style= "color: #007bff; cursor: pointer; "@click="change">Cadastre-se!</span>
+            </div>
+      </b-col>
+      <b-col v-if="register" lg="3">
+          <Register />
+          <div class="has-text-centered" style="margin-top: 20px; text-align: center;">
+          Já possui conta? <span style= "color: #007bff; cursor: pointer; "@click="change">Entrar</span>
           </div>
-        </ValidationProvider>
-
-
-      <button type="submit" :disabled="invalid">Submit</button>
-    </form>
-    <div class="has-text-centered" style="margin-top: 20px">
-      Ainda não tem conta? <nuxt-link to="/register">Cadastre-se!</nuxt-link>
-    </div>
-  </ValidationObserver>
-     </div>
-   </div>
+      </b-col>
+    </b-row>
+  </b-card>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import Register from '~/components/Register.vue'
+import Login from '~/components/Login.vue'
 import {ValidationProvider} from "vee-validate";
 import {mapState,mapActions} from 'vuex';
 
 export default {
   components: {
-      ValidationProvider,
-      Logo
+      Register,
+      Login,
     },
     data: () => ({
-      user: {
-        email: "",
-        password: "",
-      }
-
+        login: true,
+        register: false,
     }),
-  head(){
-    return {
-      title: "Bem Vindo!"
-    }
-  },
-  methods: {
-      ...mapActions({
-        login: 'login'
-      }),
-      onSubmit() {
-        this.login(this.user)
-      }
+    methods: {
+        change(){
+            this.login = !this.login,
+            this.register = !this.register
+        }
     }
 }
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
 
 .title {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
