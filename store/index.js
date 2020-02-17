@@ -60,7 +60,7 @@ export const mutations = {
   edit(state, changes){
     state.email = changes.email,
     state.name = changes.name,
-    state.password = chagnes.password
+    state.password = changes.password
   }
 }
 

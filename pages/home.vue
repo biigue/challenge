@@ -74,8 +74,8 @@
       review: false,
       avaliar: false,
       center: {
-        lat: -3.350235,
-        lng: 111.995865
+        lat: -8.0635786,
+        lng: -34.8740318
       },
       mapTypeId: "terrain",
       markers: [],
