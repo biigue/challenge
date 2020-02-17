@@ -1,40 +1,65 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        challenge
-      </h1>
-      <h2 class="subtitle">
-        My tiptop Nuxt.js project
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+   <div class="row">
+     <div class="col">
+        <ValidationObserver v-slot="{ invalid }">
+    <form @submit.prevent="onSubmit">
+      <h3>Cadastre-se</h3>
+
+      <ValidationProvider rules="required|email" v-slot="{ errors, classes }">
+        <div class="control" :class="classes">
+          <input type="text" v-model="user.email">
+          <span>{{ errors[0] }}</span>
+        </div>
+      </ValidationProvider>
+
+        <ValidationProvider rules="required" v-slot="{ errors, classes }">
+          <div class="control" :class="classes">
+            <input v-model="user.password" type="password">
+            <span>{{ errors[0] }}</span>
+          </div>
+        </ValidationProvider>
+
+
+      <button type="submit" :disabled="invalid">Submit</button>
+    </form>
+    <div class="has-text-centered" style="margin-top: 20px">
+      Ainda não tem conta? <nuxt-link to="/register">Cadastre-se!</nuxt-link>
     </div>
-  </div>
+  </ValidationObserver>
+     </div>
+   </div>
 </template>
 
 <script>
 import Logo from '~/components/Logo.vue'
+import {ValidationProvider} from "vee-validate";
+import {mapState,mapActions} from 'vuex';
 
 export default {
   components: {
-    Logo
-  }
+      ValidationProvider,
+      Logo
+    },
+    data: () => ({
+      user: {
+        email: "",
+        password: "",
+      }
+
+    }),
+  head(){
+    return {
+      title: "Bem Vindo!"
+    }
+  },
+  methods: {
+      ...mapActions({
+        login: 'login'
+      }),
+      onSubmit() {
+        this.login(this.user)
+      }
+    }
 }
 </script>
 
